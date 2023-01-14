@@ -1,0 +1,111 @@
+name: dockercompose6140137668490147957
+services:
+  backend:
+    build:
+      context: C:\Users\Evgen\Desktop\Проекты\BFQG
+      dockerfile: SFQG/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: SFQG
+      target: base
+    container_name: SFQG
+    entrypoint:
+    - tail
+    - -f
+    - /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      ASPNETCORE_URLS: http://+:80;https://+:443
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: /root/.nuget/fallbackpackages
+    image: sfqg:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages
+        --additionalProbingPath /root/.nuget/fallbackpackages  "/app/bin/Debug/net7.0/SFQG.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 80
+      published: "5000"
+      protocol: tcp
+    - mode: ingress
+      target: 443
+      published: "5001"
+      protocol: tcp
+    tty: true
+    volumes:
+    - type: bind
+      source: C:\Users\Evgen\Desktop\Проекты\BFQG\SFQG
+      target: /app
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Evgen\vsdbg\vs2017u5
+      target: /remote_debugger
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Evgen\AppData\Roaming/ASP.NET/Https
+      target: /root/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Evgen\AppData\Roaming/Microsoft/UserSecrets
+      target: /root/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages
+      target: /root/.nuget/fallbackpackages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Evgen\.nuget\packages\
+      target: /root/.nuget/packages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Evgen\Desktop\Проекты\BFQG
+      target: /src
+      bind:
+        create_host_path: true
+  client:
+    build:
+      context: C:\Users\Evgen\Desktop\Проекты\BFQG\ffqg-project
+      dockerfile: Dockerfile
+    image: client
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 3000
+      published: "5002"
+      protocol: tcp
+  proxy:
+    image: nginx:mainline
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 80
+      published: "80"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: C:\Users\Evgen\Desktop\Проекты\BFQG\nginx.conf
+      target: /etc/nginx/nginx.conf
+      bind:
+        create_host_path: true
+networks:
+  default:
+    name: dockercompose6140137668490147957_default

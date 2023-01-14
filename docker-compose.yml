@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  backend:
+    image: ${DOCKER_REGISTRY-}sfqg
+    build:
+      context: .
+      dockerfile: SFQG/Dockerfile
+  client:
+    image: client
+    build: 
+        context: ./ffqg-project
+        dockerfile: Dockerfile
+  proxy:
+    image: nginx:mainline
