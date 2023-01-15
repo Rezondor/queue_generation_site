@@ -1,5 +1,5 @@
-.vs
+/*.vs
 /.vs
 *.cache
 /.vs/slnx.sqlite
-/.vs/BFQG/DesignTimeBuild/.dtbcache.v2
+*.dtbcache.v2
