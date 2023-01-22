@@ -2,4 +2,5 @@
 /.vs
 *.cache
 /.vs/slnx.sqlite
+/bin
 *.dtbcache.v2
